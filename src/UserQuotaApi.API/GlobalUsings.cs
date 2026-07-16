@@ -1,0 +1,11 @@
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Options;
+global using System.Collections.Concurrent;
+global using UserQuotaApi.API.Infrastructure;
+global using UserQuotaApi.API.Models;
+global using UserQuotaApi.API.Repositories;
+global using UserQuotaApi.API.Repositories.Ef;
+global using UserQuotaApi.API.Repositories.InMemory;
+global using UserQuotaApi.API.Services;
