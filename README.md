@@ -83,6 +83,23 @@ UserQuotaApi/
 
 ## 4. Running the API
 
+### Recommended evaluator quick start
+
+From the repository root, restore dependencies, run all automated tests, and
+start the API:
+
+```powershell
+dotnet restore UserQuotaApi.sln
+dotnet test UserQuotaApi.sln --no-restore
+dotnet run --project src\UserQuotaApi.API --no-restore
+```
+
+Then open `http://localhost:5000/swagger`.
+
+This is the simplest evaluation path. It does not require Docker, a database
+server, the Aspire workload, or an HTTPS development certificate. The SQLite
+schema and `quota.db` file are created automatically.
+
 ### 4.1 Direct (dotnet run)
 
 ```powershell
@@ -102,10 +119,11 @@ SQLite creates `quota.db` automatically on first run — no migrations needed.
 
 ### 4.2 Aspire Dashboard
 
-The solution includes a `.NET Aspire` AppHost that provides a live telemetry dashboard (traces, logs, metrics).
+The optional `.NET Aspire` AppHost provides a live telemetry dashboard (traces,
+logs, and metrics). It is not required to run or test the API.
 
-The Aspire dashboard uses HTTPS and requires a valid ASP.NET Core development
-certificate. Create and trust it once before starting the AppHost:
+The default AppHost profile uses HTTPS and requires a valid ASP.NET Core
+development certificate. Create and trust it once before starting that profile:
 
 ```powershell
 dotnet dev-certs https
@@ -132,6 +150,12 @@ Then run the AppHost:
 dotnet run --project src\UserQuotaApi.AppHost
 ```
 
+Alternatively, run the existing HTTP profile without creating a certificate:
+
+```powershell
+dotnet run --project src\UserQuotaApi.AppHost --launch-profile http
+```
+
 Aspire prints two URLs when it starts:
 
 ```
@@ -151,10 +175,8 @@ Open the dashboard URL in your browser to see:
 > `http://localhost:5000` as described in section 4.1. Production deployments
 > should use a proper production certificate, not the development certificate.
 
-> The dashboard requires .NET Aspire workload. Install it once with:
-> ```powershell
-> dotnet workload install aspire
-> ```
+> This project references the Aspire 9 hosting packages directly, so no
+> separate Aspire workload installation is required.
 
 ---
 
@@ -234,7 +256,7 @@ dotnet test tests\UserQuotaApi.UnitTests
 Expected output:
 
 ```
-Passed!  - Failed: 0, Passed: 28, Skipped: 0, Total: 28
+Passed!  - Failed: 0, Passed: 14, Skipped: 0, Total: 14
 ```
 
 ---
@@ -275,10 +297,12 @@ Run both suites together:
 dotnet test
 ```
 
-Expected combined output:
+Expected totals across both test projects:
 
 ```
-Passed!  - Failed: 0, Passed: 45, Skipped: 0, Total: 45
+Unit tests:        Failed: 0, Passed: 14, Skipped: 0, Total: 14
+Integration tests: Failed: 0, Passed: 17, Skipped: 0, Total: 17
+Overall:           Failed: 0, Passed: 31, Skipped: 0, Total: 31
 ```
 
 ---
