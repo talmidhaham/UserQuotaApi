@@ -104,6 +104,30 @@ SQLite creates `quota.db` automatically on first run — no migrations needed.
 
 The solution includes a `.NET Aspire` AppHost that provides a live telemetry dashboard (traces, logs, metrics).
 
+The Aspire dashboard uses HTTPS and requires a valid ASP.NET Core development
+certificate. Create and trust it once before starting the AppHost:
+
+```powershell
+dotnet dev-certs https
+dotnet dev-certs https --trust
+```
+
+Verify that a valid certificate is available:
+
+```powershell
+dotnet dev-certs https --check
+```
+
+If the existing certificate is expired or invalid, recreate it:
+
+```powershell
+dotnet dev-certs https --clean
+dotnet dev-certs https
+dotnet dev-certs https --trust
+```
+
+Then run the AppHost:
+
 ```powershell
 dotnet run --project src\UserQuotaApi.AppHost
 ```
@@ -121,6 +145,11 @@ Open the dashboard URL in your browser to see:
 - **Console logs** — structured logs from every request
 - **Traces** — distributed trace spans per HTTP request
 - **Metrics** — request rates, durations, error counts
+
+> The development certificate is required for the Aspire dashboard's HTTPS
+> endpoint. It is not required when running the API directly over
+> `http://localhost:5000` as described in section 4.1. Production deployments
+> should use a proper production certificate, not the development certificate.
 
 > The dashboard requires .NET Aspire workload. Install it once with:
 > ```powershell
