@@ -83,7 +83,7 @@ UserQuotaApi/
 
 ## 4. Running the API
 
-### Recommended evaluator quick start
+### Recommended quick start
 
 From the repository root, restore dependencies, run all automated tests, and
 start the API:
